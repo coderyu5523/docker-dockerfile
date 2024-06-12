@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    build:
+      context: ./db
+    ports:
+      - 3306:3306
+    restart: always
+  server:
+    build:
+      context: ./server
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - db
+    environment:
+      RDS_HOSTNAME: db
+      RDS_PORT: 3306
+      RDS_USERNAME: ssar
+      RDS_PASSWORD: ssar1234
+      RDS_DB_NAME: blogdb
+
+
+        # 원래는 rds_hostname 에 아이피를 넣어야 되는데 도커 컴포즈에서는 서비스명으로 찾을 수 있음. 도커파일에선 안됨.
+
+#  서버가 실행되고 db가 먼저 실행되야됨. 그래서  depends_on 을 걸어두면 db 가 먼저 실행되고 서버가 실행됨. 그래서 서버가 실행되는데 실패하면 안되기 때문에 restart: always 를 걸어둠.
