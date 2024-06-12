@@ -1,16 +1,17 @@
-apt-get update
+#!/bin/bash
 
-apt-get install -y git 1>/dev/null
+# 프로젝트 클론
+git clone https://github.com/coderyu5523/spring-real-ip /spring-real-ip
 
-git clone https://github.com/coderyu5523/spring-real-ip
+# 프로젝트 디렉토리로 이동
+cd /spring-real-ip
 
-# 혹시 문제 생기면 비동기적으로 처리하려고함
-sleep 1s 
-
-cd blog-last
-
+# 빌드 및 실행
 chmod +x gradlew
+./gradlew build -x test
 
-./gradlew build
+# Nginx 시작
+nginx &
 
-java -jar -Dspring.profile.active=dev build/libs/*.jar
+# 스프링 애플리케이션 실행
+java -jar build/libs/*.jar
